@@ -11,7 +11,7 @@ use Symfony\UX\Turbo\Attribute\Broadcast;
 class Ability
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: "SEQUENCE")]
     #[ORM\Column]
     private ?int $id = null;
 
