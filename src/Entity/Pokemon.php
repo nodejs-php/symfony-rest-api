@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PokemonRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: PokemonRepository::class)]
 #[Broadcast]
@@ -30,8 +31,8 @@ class Pokemon
     #[ORM\Column(nullable: true)]
     private ?string $location = null;
 
-    #[ORM\ManyToOne(targetEntity: Ability::class, inversedBy: 'abilities')]
-    private ?Ability $ability = null;
+    #[ORM\ManyToMany(targetEntity: Ability::class, inversedBy: 'abilities')]
+    private Collection $abilities;
 
     public function getId(): ?int
     {

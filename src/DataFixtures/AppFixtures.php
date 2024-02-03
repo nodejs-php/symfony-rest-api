@@ -11,19 +11,37 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $ability = AbilityFactory::createOne(['name' => 'ability1', 'lang' => 'en', 'image' => 'image1']);
-        $ability->save();
+        $fly = AbilityFactory::createOne(['name' => 'fly', 'lang' => 'en', 'image' => 'fly-image1']);
+        $fly->save();
 
-        $pokemon = PokemonFactory::new()->createOne(
+        $swim = AbilityFactory::createOne(['name' => 'swim', 'lang' => 'en', 'image' => 'swim-image1']);
+        $swim->save();
+
+        $run = AbilityFactory::createOne(['name' => 'run', 'lang' => 'en', 'image' => 'run-image1']);
+        $run->save();
+
+        $bird = PokemonFactory::new()->createOne(
             [
-                'name' => 'name1',
+                'name' => 'bird',
                 'sort' => 1,
-                'image' => 'image1',
+                'image' => 'bird1',
                 'shape' => 'head',
-                'location' => 'City',
+                'location' => 'Forest',
             ]
         );
-        $pokemon->setAbility($ability->object());
-        $pokemon->save();
+        $bird->setAbility($fly->object());
+        $bird->save();
+
+        $fish = PokemonFactory::new()->createOne(
+            [
+                'name' => 'fish',
+                'sort' => 1,
+                'image' => 'fish1',
+                'shape' => 'fins',
+                'location' => 'Water',
+            ]
+        );
+        $fish->setAbility($swim->object());
+        $fish->save();
     }
 }

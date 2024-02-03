@@ -22,11 +22,7 @@ class PokemonController extends AbstractController
         $data = [];
 
         foreach ($pokemons as $pokemon) {
-            $data[] = [
-                'id' => $pokemon->getId(),
-                'name' => $pokemon->getName(),
-                'description' => $pokemon->getDescription(),
-            ];
+            $data[] = $pokemon;
         }
 
         return $this->json($data);
