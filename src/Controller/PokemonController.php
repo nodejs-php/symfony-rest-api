@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\ArgumentResolver\QueryParam;
 use App\Entity\Pokemon;
 use App\Exception\AbilityNotFoundException;
 use App\Repository\AbilityRepository;
@@ -12,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 #[Route('/api', name: 'api_')]
 class PokemonController extends AbstractController
@@ -22,6 +24,19 @@ class PokemonController extends AbstractController
     )
     {
     }
+
+    #[Route(path: "", name: "all", methods: ["GET"])]
+    public function all(Request $request): Response
+    {
+        $keyword = $request->request->get('keyword');
+        $offset = $request->request->get('offset');
+        $limit = $request->request->get('limit');
+
+        $data = $this->pokemonRepository->findByKeyword($keyword ?: '', $offset, $limit);
+
+        return $this->json($data);
+    }
+
 
     #[Route('/pokemons', name: 'pokemon_index', methods:['get'] )]
     public function index(): JsonResponse

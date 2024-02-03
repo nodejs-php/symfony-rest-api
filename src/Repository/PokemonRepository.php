@@ -2,9 +2,13 @@
 
 namespace App\Repository;
 
+use App\Dto\Page;
+use App\Dto\PokemonSummaryDto;
 use App\Entity\Pokemon;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @extends ServiceEntityRepository<Pokemon>
@@ -20,6 +24,26 @@ class PokemonRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Pokemon::class);
     }
+
+    public function findByKeyword(string $q, int $offset = 0, int $limit = 20): Page
+    {
+        $query = $this->createQueryBuilder("p")
+            ->andWhere("p.title like :q or p.content like :q")
+            ->setParameter('q', "%" . $q . "%")
+            ->orderBy('p.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->getQuery();
+
+        $paginator = new Paginator($query, $fetchJoinCollection = false);
+        $c = count($paginator);
+        $content = new ArrayCollection();
+        foreach ($paginator as $post) {
+            $content->add(PokemonSummaryDto::of($post->getId(), $post->getTitle()));
+        }
+        return Page::of ($content, $c, $offset, $limit);
+    }
+
 
 //    /**
 //     * @return Pokemon[] Returns an array of Pokemon objects
