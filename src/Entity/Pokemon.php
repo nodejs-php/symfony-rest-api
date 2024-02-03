@@ -25,13 +25,13 @@ class Pokemon
     private ?int $sort = null;
 
     #[ORM\Column(length: 10)]
-    private ?int $shape = null;
+    private ?string $shape = null;
 
     #[ORM\Column(nullable: true)]
     private ?string $location = null;
 
     #[ORM\ManyToOne(targetEntity: Ability::class, inversedBy: 'abilities')]
-    private ?string $ability = null;
+    private ?Ability $ability = null;
 
     public function getId(): ?int
     {
@@ -98,7 +98,7 @@ class Pokemon
         return $this;
     }
 
-    public function getAbility(): ?string
+    public function getAbility(): ?Ability
     {
         return $this->ability;
     }

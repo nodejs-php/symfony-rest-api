@@ -2,9 +2,8 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Comment;
-use App\Entity\PostFactory;
-use App\Entity\Tag;
+use App\Factory\AbilityFactory;
+use App\Factory\PokemonFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -12,13 +11,19 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $data = PostFactory::create("Building Restful APIs with Symfony and PHP 8", "test content");
-        $data->addTag(Tag::of( "Symfony"))
-            ->addTag( Tag::of("PHP 8"))
-            ->addComment(Comment::of("test comment 1"))
-            ->addComment(Comment::of("test comment 2"));
+        $ability = AbilityFactory::createOne(['name' => 'ability1', 'lang' => 'en', 'image' => 'image1']);
+        $ability->save();
 
-        $manager->persist($data);
-        $manager->flush();
+        $pokemon = PokemonFactory::new()->createOne(
+            [
+                'name' => 'name1',
+                'sort' => 1,
+                'image' => 'image1',
+                'shape' => 'head',
+                'location' => 'City',
+            ]
+        );
+        $pokemon->setAbility($ability->object());
+        $pokemon->save();
     }
 }
