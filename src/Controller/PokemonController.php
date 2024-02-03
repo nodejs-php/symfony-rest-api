@@ -3,26 +3,43 @@
 namespace App\Controller;
 
 use App\Entity\Pokemon;
+use App\Exception\AbilityNotFoundException;
+use App\Repository\AbilityRepository;
+use App\Repository\PokemonRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/api', name: 'api_')]
 class PokemonController extends AbstractController
 {
-    #[Route('/pokemons', name: 'pokemon_index', methods:['get'] )]
-    public function index(ManagerRegistry $doctrine): JsonResponse
+    public function __construct(private readonly PokemonRepository      $pokemonRepository,
+                                private readonly AbilityRepository      $abilityRepository,
+                                private readonly EntityManagerInterface $objectManager
+    )
     {
-        $pokemons = $doctrine
+    }
+
+    #[Route('/pokemons', name: 'pokemon_index', methods:['get'] )]
+    public function index(): JsonResponse
+    {
+        $pokemons = $this->objectManager
             ->getRepository(Pokemon::class)
             ->findAll();
 
         $data = [];
 
         foreach ($pokemons as $pokemon) {
-            $data[] = $pokemon;
+            $data[] = [
+                'id' => $pokemon->getId(),
+                'name' => $pokemon->getName(),
+                'image' => $pokemon->getImage(),
+                'shape' => $pokemon->getShape(),
+                'abilities' => $pokemon->getAbilities(),
+            ];;
         }
 
         return $this->json($data);
@@ -30,21 +47,35 @@ class PokemonController extends AbstractController
 
 
     #[Route('/pokemons', name: 'pokemon_create', methods:['post'] )]
-    public function create(ManagerRegistry $doctrine, Request $request): JsonResponse
+    public function create(Request $request): JsonResponse
     {
-        $entityManager = $doctrine->getManager();
-
         $pokemon = new Pokemon();
         $pokemon->setName($request->request->get('name'));
-        $pokemon->setDescription($request->request->get('description'));
+        $pokemon->setSort($request->request->get('sort'));
+        $pokemon->setShape($request->request->get('shape'));
+        $abilityIds = explode(',', $request->request->get('ability_ids'));
 
-        $entityManager->persist($pokemon);
-        $entityManager->flush();
+        if (!empty($abilityIds)) {
+            foreach ($abilityIds as $id) {
+                $ability = $this->abilityRepository->findOneBy(["id" => (int)$id]);
+
+                if (!$ability) {
+                    throw new AbilityNotFoundException((int)$id);
+                }
+
+                $pokemon->addAbility($ability);
+            }
+        }
+
+        $this->objectManager->persist($pokemon);
+        $this->objectManager->flush();
 
         $data =  [
             'id' => $pokemon->getId(),
             'name' => $pokemon->getName(),
-            'description' => $pokemon->getDescription(),
+            'image' => $pokemon->getImage(),
+            'shape' => $pokemon->getShape(),
+            'abilities' => $pokemon->getAbilities(),
         ];
 
         return $this->json($data);
@@ -64,7 +95,7 @@ class PokemonController extends AbstractController
         $data =  [
             'id' => $pokemon->getId(),
             'name' => $pokemon->getName(),
-            'description' => $pokemon->getDescription(),
+            'shape' => $pokemon->getShape(),
         ];
 
         return $this->json($data);
@@ -87,7 +118,7 @@ class PokemonController extends AbstractController
         $data =  [
             'id' => $pokemon->getId(),
             'name' => $pokemon->getName(),
-            'description' => $pokemon->getDescription(),
+            'shape' => $pokemon->getShape(),
         ];
 
         return $this->json($data);

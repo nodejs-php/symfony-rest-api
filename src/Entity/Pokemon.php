@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use App\Repository\AbilityRepository;
 use App\Repository\PokemonRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 use Doctrine\Common\Collections\Collection;
@@ -33,6 +36,10 @@ class Pokemon
 
     #[ORM\ManyToMany(targetEntity: Ability::class, inversedBy: 'abilities')]
     private Collection $abilities;
+
+    public function __construct() {
+        $this->abilities = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -106,7 +113,6 @@ class Pokemon
 
     public function addAbility(Ability $ability): void
     {
-        $ability->addPokemon($this);
         $this->abilities[] = $ability;
     }
 }

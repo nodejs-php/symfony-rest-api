@@ -8,6 +8,7 @@ use Symfony\UX\Turbo\Attribute\Broadcast;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+
 #[ORM\Entity(repositoryClass: AbilityRepository::class)]
 #[Broadcast]
 class Ability
@@ -72,15 +73,5 @@ class Ability
         $this->image = $image;
 
         return $this;
-    }
-
-    public function getAbilities(): Collection
-    {
-        return $this->pokemons;
-    }
-
-    public function addPokemon(Pokemon $pokemon): void
-    {
-        $this->pokemons->add($pokemon);
     }
 }

@@ -1,0 +1,47 @@
+{
+	"info": {
+		"_postman_id": "3d6abd6c-3c0a-4131-9324-08ede5365361",
+		"name": "Pokemon Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13034930",
+		"_collection_link": "https://solar-space-255276.postman.co/workspace/My-Workspace~b2e51ffa-8af2-4d9c-8d83-28beb9004a02/collection/13034930-3d6abd6c-3c0a-4131-9324-08ede5365361?action=share&source=collection_link&creator=13034930"
+	},
+	"item": [
+		{
+			"name": "GetPokemons",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost/api/pokemons",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"pokemons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Pokemon",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost/api/pokemons",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"pokemons"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
