@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\AbilityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: AbilityRepository::class)]
 #[Broadcast]
@@ -24,6 +26,12 @@ class Ability
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $image = null;
 
+    private Collection $pokemons;
+
+    public function __construct()
+    {
+        $this->pokemons = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -64,5 +72,15 @@ class Ability
         $this->image = $image;
 
         return $this;
+    }
+
+    public function getAbilities(): Collection
+    {
+        return $this->pokemons;
+    }
+
+    public function addPokemon(Pokemon $pokemon): void
+    {
+        $this->pokemons->add($pokemon);
     }
 }

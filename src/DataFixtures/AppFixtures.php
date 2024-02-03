@@ -29,7 +29,8 @@ class AppFixtures extends Fixture
                 'location' => 'Forest',
             ]
         );
-        $bird->setAbility($fly->object());
+        $bird->addAbility($fly->object());
+        $bird->addAbility($run->object());
         $bird->save();
 
         $fish = PokemonFactory::new()->createOne(
@@ -41,7 +42,7 @@ class AppFixtures extends Fixture
                 'location' => 'Water',
             ]
         );
-        $fish->setAbility($swim->object());
+        $fish->addAbility($swim->object());
         $fish->save();
     }
 }

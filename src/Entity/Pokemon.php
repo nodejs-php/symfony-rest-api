@@ -99,15 +99,14 @@ class Pokemon
         return $this;
     }
 
-    public function getAbility(): ?Ability
+    public function getAbilities(): Collection
     {
-        return $this->ability;
+        return $this->abilities;
     }
 
-    public function setAbility(?Ability $ability): self
+    public function addAbility(Ability $ability): void
     {
-        $this->ability = $ability;
-
-        return $this;
+        $ability->addPokemon($this);
+        $this->abilities[] = $ability;
     }
 }

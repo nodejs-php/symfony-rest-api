@@ -8,3 +8,6 @@
 
 Установлена система логгирования на ``xdebug`` в файл ``xdebug.log`` на случай несли упадет или нужно будет включать 
 другие режимы отладки в ```PHPSTORM```
+
+## Загрузка фикстур
+- ``docker compose exec php  php bin/console  doctrine:fixtures:load``
