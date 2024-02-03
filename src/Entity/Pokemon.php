@@ -115,4 +115,11 @@ class Pokemon
     {
         $this->abilities[] = $ability;
     }
+
+    public function deleteAbilities()
+    {
+        foreach ($this->getAbilities() as $ability) {
+            $this->getAbilities()->removeElement($ability);
+        }
+    }
 }

@@ -83,42 +83,60 @@ class PokemonController extends AbstractController
 
 
     #[Route('/pokemons/{id}', name: 'pokemon_show', methods:['get'] )]
-    public function show(ManagerRegistry $doctrine, int $id): JsonResponse
+    public function show(int $id): JsonResponse
     {
-        $pokemon = $doctrine->getRepository(Pokemon::class)->find($id);
+        $pokemon = $this->objectManager->getRepository(Pokemon::class)->find($id);
 
         if (!$pokemon) {
-
             return $this->json('Нет покемона для id ' . $id, 404);
         }
 
         $data =  [
             'id' => $pokemon->getId(),
             'name' => $pokemon->getName(),
+            'image' => $pokemon->getImage(),
             'shape' => $pokemon->getShape(),
+            'abilities' => $pokemon->getAbilities(),
         ];
 
         return $this->json($data);
     }
 
-    #[Route('/pokemons/{id}', name: 'pokemon_update', methods:['put', 'patch'] )]
-    public function update(ManagerRegistry $doctrine, Request $request, int $id): JsonResponse
+    #[Route('/pokemons/{id}', name: 'pokemon_update', methods:['post'] )]
+    public function update(Request $request, int $id): JsonResponse
     {
-        $entityManager = $doctrine->getManager();
-        $pokemon = $entityManager->getRepository(Pokemon::class)->find($id);
+        $pokemon = $this->objectManager->getRepository(Pokemon::class)->find($id);
 
         if (!$pokemon) {
             return $this->json('Нет покемона для id' . $id, 404);
         }
 
         $pokemon->setName($request->request->get('name'));
-        $pokemon->setDescription($request->request->get('description'));
-        $entityManager->flush();
+        $pokemon->setSort($request->request->get('sort'));
+        $pokemon->setShape($request->request->get('shape'));
+
+        $abilityIds = explode(',', $request->request->get('ability_ids'));
+        $pokemon->deleteAbilities();
+
+        if (!empty($abilityIds)) {
+            foreach ($abilityIds as $id) {
+                $ability = $this->abilityRepository->findOneBy(["id" => (int)$id]);
+
+                if (!$ability) {
+                    throw new AbilityNotFoundException((int)$id);
+                }
+
+                $pokemon->addAbility($ability);
+            }
+        }
+        $this->objectManager->flush();
 
         $data =  [
             'id' => $pokemon->getId(),
             'name' => $pokemon->getName(),
+            'image' => $pokemon->getImage(),
             'shape' => $pokemon->getShape(),
+            'abilities' => $pokemon->getAbilities(),
         ];
 
         return $this->json($data);
@@ -127,15 +145,14 @@ class PokemonController extends AbstractController
     #[Route('/pokemons/{id}', name: 'pokemon_delete', methods:['delete'] )]
     public function delete(ManagerRegistry $doctrine, int $id): JsonResponse
     {
-        $entityManager = $doctrine->getManager();
-        $pokemon = $entityManager->getRepository(Pokemon::class)->find($id);
+        $pokemon = $this->objectManager->getRepository(Pokemon::class)->find($id);
 
         if (!$pokemon) {
             return $this->json('Нет покемона для id' . $id, 404);
         }
 
-        $entityManager->remove($pokemon);
-        $entityManager->flush();
+        $this->objectManager->remove($pokemon);
+        $this->objectManager->flush();
 
         return $this->json('Удален покемон с id ' . $id);
     }
