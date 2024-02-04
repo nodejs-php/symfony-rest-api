@@ -20,7 +20,7 @@ class Location
     private ?string $name = null;
 
     #[ORM\ManyToOne(targetEntity: Location::class, inversedBy: 'locations')]
-    private ?int $parent= null;
+    private ?Location $parent;
 
     #[ORM\Column(name: "created_at", type: "datetime", nullable: true)]
     private DateTimeInterface|null $createdAt = null;
@@ -48,4 +48,12 @@ class Location
     {
         return $this->createdAt;
     }
+
+    public function addParent(Location $location): self
+    {
+        $this->parent = $location;
+
+        return $this;
+    }
+
 }

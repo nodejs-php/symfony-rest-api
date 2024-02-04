@@ -11,3 +11,7 @@
 
 ## Загрузка фикстур
 - ``docker compose exec php  php bin/console  doctrine:fixtures:load``
+
+## Разработка БД
+- Для генерации миграций ``docker compose exec php  php bin/console  doctrine:migrations:diff``
+- Для выполнения миграций ``docker compose exec php  php bin/console  doctrine:migrations:migrate``

@@ -113,9 +113,11 @@ class Pokemon
         return $this->abilities;
     }
 
-    public function addAbility(Ability $ability): void
+    public function addAbility(Ability $ability): self
     {
         $this->abilities[] = $ability;
+
+        return $this;
     }
 
     public function deleteAbilities()
@@ -128,5 +130,12 @@ class Pokemon
     public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
+    }
+
+    public function addLocation(Location $location): self
+    {
+        $this->location = $location;
+
+        return $this;
     }
 }
