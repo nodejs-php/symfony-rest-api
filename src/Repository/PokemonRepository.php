@@ -28,7 +28,7 @@ class PokemonRepository extends ServiceEntityRepository
     public function findByKeyword(string $q, int $offset = 0, int $limit = 20): Page
     {
         $query = $this->createQueryBuilder("p")
-            ->andWhere("p.title like :q or p.content like :q")
+            ->andWhere("p.name like :q or p.shape like :q")
             ->setParameter('q', "%" . $q . "%")
             ->orderBy('p.createdAt', 'DESC')
             ->setMaxResults($limit)
@@ -43,30 +43,4 @@ class PokemonRepository extends ServiceEntityRepository
         }
         return Page::of ($content, $c, $offset, $limit);
     }
-
-
-//    /**
-//     * @return Pokemon[] Returns an array of Pokemon objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Pokemon
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

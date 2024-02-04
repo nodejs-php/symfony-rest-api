@@ -7,13 +7,14 @@ use App\Entity\Pokemon;
 use App\Exception\AbilityNotFoundException;
 use App\Repository\AbilityRepository;
 use App\Repository\PokemonRepository;
+use App\Requests\FilterPokemonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/api', name: 'api_')]
 class PokemonController extends AbstractController
@@ -25,12 +26,18 @@ class PokemonController extends AbstractController
     {
     }
 
-    #[Route(path: "", name: "all", methods: ["GET"])]
-    public function all(Request $request): Response
+    #[Route(path: "", name: "search", methods: ["GET"])]
+    public function search(FilterPokemonRequest $request): Response
     {
-        $keyword = $request->request->get('keyword');
-        $offset = $request->request->get('offset');
-        $limit = $request->request->get('limit');
+        $errors = $request->validate();
+
+        if (count($errors)) {
+            return $this->json($errors);
+        }
+
+        $keyword = $request->getRequest()->get('keyword');
+        $offset = $request->getRequest()->get('offset');
+        $limit = $request->getRequest()->get('limit');
 
         $data = $this->pokemonRepository->findByKeyword($keyword ?: '', $offset, $limit);
 

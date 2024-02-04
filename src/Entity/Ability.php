@@ -3,11 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\AbilityRepository;
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
-
 
 #[ORM\Entity(repositoryClass: AbilityRepository::class)]
 #[Broadcast]
@@ -27,7 +26,8 @@ class Ability
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $image = null;
 
-    private Collection $pokemons;
+    #[ORM\Column(name: "created_at", type: "datetime", nullable: true)]
+    private DateTimeInterface|null $createdAt = null;
 
     public function __construct()
     {
@@ -73,5 +73,10 @@ class Ability
         $this->image = $image;
 
         return $this;
+    }
+
+    public function getCreatedAt(): ?DateTimeInterface
+    {
+        return $this->createdAt;
     }
 }

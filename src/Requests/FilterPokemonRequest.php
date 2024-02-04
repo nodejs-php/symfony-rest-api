@@ -5,17 +5,17 @@ namespace App\Requests;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
 
-class PokemonRequest extends BaseRequest
+class FilterPokemonRequest extends BaseRequest
 {
     #[Type('integer')]
     #[NotBlank()]
-    protected $id;
+    protected $keyword;
 
     #[NotBlank([])]
-    protected $name;
+    protected $offset;
 
     #[NotBlank([])]
-    protected $sort;
+    protected $limit;
 
     #[NotBlank([])]
     protected $shape;

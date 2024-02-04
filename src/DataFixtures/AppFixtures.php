@@ -44,5 +44,11 @@ class AppFixtures extends Fixture
         );
         $fish->addAbility($swim->object());
         $fish->save();
+
+        PokemonFactory::new()->createOne([ 'name' => 'Hoenn'] )->save();
+        PokemonFactory::new()->createOne([ 'name' => 'Volcano'] )->save();
+        PokemonFactory::new()->createOne([ 'name' => 'Cinnabar Gym'] )->save();
+        PokemonFactory::new()->createOne([ 'name' => 'Mansion'] )->save();
+        PokemonFactory::new()->createOne([ 'name' => 'Cinnabar Lab - Kanto'] )->save();
     }
 }

@@ -11,6 +11,10 @@ abstract class BaseRequest
     public function __construct(protected ValidatorInterface $validator)
     {
         $this->populate();
+
+        if ($this->autoValidateRequest()) {
+            $this->validate();
+        }
     }
 
     public function validate(): ConstraintViolationListInterface

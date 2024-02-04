@@ -2,10 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\AbilityRepository;
 use App\Repository\PokemonRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityManagerInterface;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 use Doctrine\Common\Collections\Collection;
@@ -31,11 +30,14 @@ class Pokemon
     #[ORM\Column(length: 10)]
     private ?string $shape = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?string $location = null;
+    #[ORM\ManyToOne(targetEntity: Location::class, inversedBy: 'pokemons')]
+    private ?Location $location = null;
 
-    #[ORM\ManyToMany(targetEntity: Ability::class, inversedBy: 'abilities')]
+    #[ORM\ManyToMany(targetEntity: Ability::class, inversedBy: 'pokemons')]
     private Collection $abilities;
+
+    #[ORM\Column(name: "created_at", type: "datetime", nullable: true)]
+    private DateTimeInterface|null $createdAt = null;
 
     public function __construct() {
         $this->abilities = new ArrayCollection();
@@ -121,5 +123,10 @@ class Pokemon
         foreach ($this->getAbilities() as $ability) {
             $this->getAbilities()->removeElement($ability);
         }
+    }
+
+    public function getCreatedAt(): ?DateTimeInterface
+    {
+        return $this->createdAt;
     }
 }
