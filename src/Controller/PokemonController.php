@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\ArgumentResolver\Body;
 use App\ArgumentResolver\QueryParam;
 use App\Entity\Pokemon;
 use App\Exception\AbilityNotFoundException;
