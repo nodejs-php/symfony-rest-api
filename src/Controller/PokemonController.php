@@ -7,7 +7,6 @@ use App\Entity\Pokemon;
 use App\Exception\AbilityNotFoundException;
 use App\Repository\AbilityRepository;
 use App\Repository\PokemonRepository;
-use App\Requests\FilterRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,17 +26,14 @@ class PokemonController extends AbstractController
     }
 
     #[Route(path: "/pokemons/search", name: "search", methods: ["get"])]
-    public function search(Request $request): Response
+    public function search(#[QueryParam('keyword', true)] string $keyword,
+                           #[QueryParam('offset')] int     $offset = 0,
+                           #[QueryParam('limit', true)] int      $limit = 20): Response
     {
-        $keyword = $request->query->get('keyword');
-        $offset = (int)$request->query->get('offset');
-        $limit = (int)$request->query->get('limit');
-
         $data = $this->pokemonRepository->findByKeyword($keyword ?: '', $offset, $limit);
 
         return $this->json($data);
     }
-
 
     #[Route('/pokemons', name: 'pokemon_index', methods:['get'] )]
     public function index(): JsonResponse
