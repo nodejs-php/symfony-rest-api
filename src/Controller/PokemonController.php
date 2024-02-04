@@ -7,7 +7,7 @@ use App\Entity\Pokemon;
 use App\Exception\AbilityNotFoundException;
 use App\Repository\AbilityRepository;
 use App\Repository\PokemonRepository;
-use App\Requests\FilterPokemonRequest;
+use App\Requests\FilterRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,18 +26,12 @@ class PokemonController extends AbstractController
     {
     }
 
-    #[Route(path: "", name: "search", methods: ["GET"])]
-    public function search(FilterPokemonRequest $request): Response
+    #[Route(path: "/pokemons/search", name: "search", methods: ["get"])]
+    public function search(Request $request): Response
     {
-        $errors = $request->validate();
-
-        if (count($errors)) {
-            return $this->json($errors);
-        }
-
-        $keyword = $request->getRequest()->get('keyword');
-        $offset = $request->getRequest()->get('offset');
-        $limit = $request->getRequest()->get('limit');
+        $keyword = $request->query->get('keyword');
+        $offset = (int)$request->query->get('offset');
+        $limit = (int)$request->query->get('limit');
 
         $data = $this->pokemonRepository->findByKeyword($keyword ?: '', $offset, $limit);
 
@@ -104,13 +98,13 @@ class PokemonController extends AbstractController
     }
 
 
-    #[Route('/pokemons/{id}', name: 'pokemon_show', methods:['get'] )]
+    #[Route('/pokemons/{id}', name: 'pokemon_show', requirements: ['id' => '\d+'], methods:['get'] )]
     public function show(int $id): JsonResponse
     {
         $pokemon = $this->objectManager->getRepository(Pokemon::class)->find($id);
 
         if (!$pokemon) {
-            return $this->json('Нет покемона для id ' . $id, 404);
+            return $this->json('Нет покемона для id =' . $id, 404);
         }
 
         $data =  [
@@ -124,13 +118,13 @@ class PokemonController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/pokemons/{id}', name: 'pokemon_update', methods:['post'] )]
+    #[Route('/pokemons/{id}', name: 'pokemon_update', requirements: ['id' => '\d+'], methods:['post'] )]
     public function update(Request $request, int $id): JsonResponse
     {
         $pokemon = $this->objectManager->getRepository(Pokemon::class)->find($id);
 
         if (!$pokemon) {
-            return $this->json('Нет покемона для id' . $id, 404);
+            return $this->json('Нет покемона для id = ' . $id, 404);
         }
 
         $pokemon->setName($request->request->get('name'));
@@ -164,18 +158,18 @@ class PokemonController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/pokemons/{id}', name: 'pokemon_delete', methods:['delete'] )]
+    #[Route('/pokemons/{id}', name: 'pokemon_delete', requirements: ['id' => '\d+'], methods:['delete'])]
     public function delete(ManagerRegistry $doctrine, int $id): JsonResponse
     {
         $pokemon = $this->objectManager->getRepository(Pokemon::class)->find($id);
 
         if (!$pokemon) {
-            return $this->json('Нет покемона для id' . $id, 404);
+            return $this->json('Нет покемона для id =' . $id, 404);
         }
 
         $this->objectManager->remove($pokemon);
         $this->objectManager->flush();
 
-        return $this->json('Удален покемон с id ' . $id);
+        return $this->json('Удален покемон с id = ' . $id);
     }
 }

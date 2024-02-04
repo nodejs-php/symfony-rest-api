@@ -30,6 +30,36 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "pokemon1",
+							"type": "text"
+						},
+						{
+							"key": "sort",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "shape",
+							"value": "head",
+							"type": "text"
+						},
+						{
+							"key": "ability_ids",
+							"value": "4",
+							"type": "text"
+						},
+						{
+							"key": "location",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
 				"url": {
 					"raw": "localhost/api/pokemons",
 					"host": [
@@ -38,6 +68,174 @@
 					"path": [
 						"api",
 						"pokemons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Pokemon",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "pokemon1",
+							"type": "text"
+						},
+						{
+							"key": "sort",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "shape",
+							"value": "head",
+							"type": "text"
+						},
+						{
+							"key": "ability_ids",
+							"value": "4",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/api/pokemons/25",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"pokemons",
+						"25"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Show Pokemon",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "pokemon1",
+							"type": "text"
+						},
+						{
+							"key": "sort",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "shape",
+							"value": "head",
+							"type": "text"
+						},
+						{
+							"key": "ability_ids",
+							"value": "7,8",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/api/pokemons/23",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"pokemons",
+						"23"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pokemon Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "pokemon1",
+							"type": "text"
+						},
+						{
+							"key": "sort",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "shape",
+							"value": "head",
+							"type": "text"
+						},
+						{
+							"key": "ability_ids",
+							"value": "7,8",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/api/pokemons/25",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"pokemons",
+						"25"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pokemon Search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost/api/pokemons/search?keyword=bird&offset=0&limit=2",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"pokemons",
+						"search"
+					],
+					"query": [
+						{
+							"key": "keyword",
+							"value": "bird"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "2"
+						}
 					]
 				}
 			},

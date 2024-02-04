@@ -38,9 +38,11 @@ class PokemonRepository extends ServiceEntityRepository
         $paginator = new Paginator($query, $fetchJoinCollection = false);
         $c = count($paginator);
         $content = new ArrayCollection();
-        foreach ($paginator as $post) {
-            $content->add(PokemonSummaryDto::of($post->getId(), $post->getTitle()));
+
+        foreach ($paginator as $pokemon) {
+            $content->add(PokemonSummaryDto::of($pokemon->getId(), $pokemon->getName()));
         }
+
         return Page::of ($content, $c, $offset, $limit);
     }
 }

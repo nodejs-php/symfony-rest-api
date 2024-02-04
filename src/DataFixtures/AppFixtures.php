@@ -61,7 +61,7 @@ class AppFixtures extends Fixture
                 'shape' => 'fins',
             ]
         );
-        //$fish->addAbility($swim->object());
+        $fish->addAbility($swim->object());
         $fish->addLocation($location4->object());
         $fish->save();
     }
