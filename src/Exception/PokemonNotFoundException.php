@@ -2,8 +2,6 @@
 
 namespace App\Exception;
 
-use Symfony\Component\Uid\Uuid;
-
 class PokemonNotFoundException extends \RuntimeException
 {
 

@@ -3,9 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\LocationRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
-use DateTimeInterface;
 
 #[ORM\Entity(repositoryClass: LocationRepository::class)]
 #[Broadcast]

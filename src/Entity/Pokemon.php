@@ -3,11 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\PokemonRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
-use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: PokemonRepository::class)]
 #[Broadcast]
