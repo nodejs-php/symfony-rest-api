@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 
 #[ORM\Entity(repositoryClass: PokemonRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[Broadcast]
 class Pokemon
 {
@@ -96,7 +97,7 @@ class Pokemon
         return $this;
     }
 
-    public function getLocation(): ?string
+    public function getLocation(): Location
     {
         return $this->location;
     }
@@ -137,5 +138,11 @@ class Pokemon
         $this->location = $location;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue()
+    {
+        $this->createdAt = new \DateTime("now");
     }
 }

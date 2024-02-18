@@ -9,6 +9,7 @@ use Symfony\UX\Turbo\Attribute\Broadcast;
 
 #[ORM\Entity(repositoryClass: LocationRepository::class)]
 #[Broadcast]
+#[ORM\HasLifecycleCallbacks]
 class Location
 {
     #[ORM\Id]
@@ -56,4 +57,9 @@ class Location
         return $this;
     }
 
+    #[ORM\PrePersist]
+    public function setCreatedAtValue()
+    {
+        $this->createdAt = new \DateTime("now");
+    }
 }

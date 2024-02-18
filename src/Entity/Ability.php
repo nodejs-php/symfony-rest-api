@@ -10,6 +10,7 @@ use Symfony\UX\Turbo\Attribute\Broadcast;
 
 #[ORM\Entity(repositoryClass: AbilityRepository::class)]
 #[Broadcast]
+#[ORM\HasLifecycleCallbacks]
 class Ability
 {
     #[ORM\Id]
@@ -75,8 +76,9 @@ class Ability
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeInterface
+    #[ORM\PrePersist]
+    public function setCreatedAtValue()
     {
-        return $this->createdAt;
+        $this->createdAt = new \DateTime("now");
     }
 }
